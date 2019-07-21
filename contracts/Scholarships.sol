@@ -31,6 +31,7 @@ contract Scholarships {
         scholarships[scholarshipCount] = Scholarship(scholarshipCount, _name, msg.sender, description, true, 0, msg.value, essay, createdAt);
     }
 
+    /*
     function addApplicant(uint id, uint applicantId) public returns (uint) {
         Scholarship storage scholarship = scholarships[id];
         scholarship.applicantCount ++;
@@ -39,5 +40,6 @@ contract Scholarships {
         //applicants[id] = current;
         return scholarship.applicantCount;
     }
+    */
 
 }

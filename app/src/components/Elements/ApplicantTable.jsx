@@ -33,7 +33,7 @@ const ApplicantTable = ({ scholarshipId }) => {
     ) : (
         <div className="row mt-4">
             <div className="col-md-12 text-center">
-                <h3 className="font-weight-light">There are currently no applicants</h3>
+                <h3 className="font-weight-light">There are currently no applicants.</h3>
             </div>
         </div>
     )

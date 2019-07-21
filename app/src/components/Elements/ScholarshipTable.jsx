@@ -19,7 +19,7 @@ const ScholarshipTable = () => {
                 <thead>
                     <tr>
                         <th scope="col">Name</th>
-                        <th scope="col">Applicants</th>
+                        <th scope="col">Created</th>
                         <th scope="col">Award</th>
                     </tr>
                 </thead>
