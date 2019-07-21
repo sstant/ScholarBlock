@@ -1,4 +1,4 @@
-import React, { Component, Children } from 'react';
+import React from 'react';
 import { drizzleReactHooks } from 'drizzle-react';
 
 const Loading = ({ children }) => {

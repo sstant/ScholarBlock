@@ -1,20 +1,12 @@
 import React from 'react';
-import { drizzleReactHooks } from 'drizzle-react';
 
-const OwnerAlert = ({ owner }) => {
+const OwnerAlert = () => {
 
-    const drizzleState = drizzleReactHooks.useDrizzleState(drizzleState => ({
-        ...drizzleState,
-        account: drizzleState.accounts[0]
-      }));
-    
-      const { account } = drizzleState;
-
-    return owner === account ? (
+    return (
         <div className="alert alert-primary" role="alert">
             You own this scholarship.
         </div>
-    ) : (null)
+    )
 
 }
 

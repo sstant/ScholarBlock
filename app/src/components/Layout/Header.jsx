@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Header = props => (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <Link className="navbar-brand" to="/">
+        <Link className="navbar-brand" style={{'fontWeight':'500'}} to="/">
           <img src={logo} alt="ScholarBlock" width="24" style={{
             'marginTop': '-7px',
             'marginRight': '7px'
@@ -17,13 +17,13 @@ const Header = props => (
         <div className="collapse navbar-collapse" id="navbarText">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
-              <a className="nav-link" href="#top">Home <span className="sr-only">(current)</span></a>
+              <a className="nav-link" href="#top">Home</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#top">About</a>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="#top">How it Works</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#top">Community</a>
             </li>
           </ul>
           <span className="navbar-text">

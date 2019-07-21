@@ -1,7 +1,7 @@
 import React from 'react';
-import { ScholarshipTable, YourAccount, CreateScholarship } from '../Elements/';
+import { ScholarshipTable, YourAccount, CreateScholarship, CreateAccount } from '../Elements/';
 
-const Home = ({ account }) => {
+const Home = ({ account, user }) => {
 
     return (
         <div className="container">
@@ -10,8 +10,13 @@ const Home = ({ account }) => {
                     <ScholarshipTable />
                 </div>
                 <div className="col-md-4">
-                    <YourAccount account={account} />
-                    <CreateScholarship />
+                    {
+                        user ? (<YourAccount account={account} user={user} />) : (<CreateAccount account={account} />)
+                    }
+                    {
+                        user && user.level === 'funder' && (<CreateScholarship />)
+                    }
+                    
                 </div>
             </div> 
         </div>

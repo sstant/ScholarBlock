@@ -1,24 +1,27 @@
 import React from 'react';
-import { drizzleReactHooks } from 'drizzle-react';
+import { CreateAccount, UserDetails, AddressFooter } from '../Elements';
 
-const YourAccount = props => {
+const YourAccount = ({ account, user }) => {
 
-    const drizzleState = drizzleReactHooks.useDrizzleState(drizzleState => ({
-        ...drizzleState,
-        account: drizzleState.accounts[0]
-      }));
-    
-      const { account } = drizzleState;
-
-      return (
-        <div className="card">
-            <div className="card-header">Your Account</div>
-            <div className="card-body">
-              <p>{account}</p>
+  return (
+    <div className="card">
+    <div className="card-header">Your Account</div>
+    <div className="card-body">
+      {
+        user ? (<UserDetails user={user} />) : (
+          <div className="row">
+            <div className="col-md-12">
+              <p>Howdy, stranger. Create an account:</p>
+              <CreateAccount address={account} />
             </div>
           </div>
+        )
+      }
+    </div>
+    <AddressFooter account={account} />
+    </div>
     )
-
-}
-
-export default YourAccount;
+    
+  }
+  
+  export default YourAccount;

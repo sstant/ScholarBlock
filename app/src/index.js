@@ -13,8 +13,6 @@ import './styles/main.css';
 const drizzleStore = generateStore(options);
 const drizzle = new Drizzle(options, drizzleStore);
 
-console.log(drizzle);
-
 ReactDOM.render(
 <drizzleReactHooks.DrizzleProvider drizzle={drizzle}>
    <Loading>

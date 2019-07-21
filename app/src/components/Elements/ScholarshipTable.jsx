@@ -1,6 +1,7 @@
 import React from 'react';
 import { drizzleReactHooks } from 'drizzle-react';
 import { ScholarshipRow } from './';
+import emptyPiggyBank from '../../images/emptyPiggyBank.png';
 
 const ScholarshipTable = () => {
 
@@ -30,7 +31,14 @@ const ScholarshipTable = () => {
                 </table>
             </div>
         </div>
-    ) : (<h3 className="text-center">There are currently no scholarships available at this address.</h3>)
+    ) : (
+        <div className="row mt-4">
+            <div className="col-md-12 text-center">
+                <h3 className="font-weight-light">There are currently no scholarships available at this address.</h3>
+                <img src={emptyPiggyBank} alt="Empty Piggy Bank" width="240" />
+            </div>
+        </div>
+    )
 
 }
 

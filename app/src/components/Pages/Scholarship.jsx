@@ -1,62 +1,72 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { drizzleReactHooks } from 'drizzle-react';
-import { OwnerAlert } from '../Elements';
+import { OwnerAlert, ApplyForm, CreateAccount, ApplicantTable } from '../Elements';
 import web3 from 'web3';
 
 const Scholarship = props => {
 
-    const { useCacheSend } = drizzleReactHooks.useDrizzle();
-    const { apply, TXObjects } = useCacheSend('Applicants', 'apply');
-
-    const [firstName, updateFirstName] = useState('');
-    const [lastName, updateLastName] = useState('');
-    const [email, updateEmail] = useState('');
-
+    const { account, user } = props;
     const { id } = props.match.params;
+    let owner = false;
 
     const { useCacheCall } = drizzleReactHooks.useDrizzle();
     const scholarship = useCacheCall('Scholarships', 'scholarships', id);
 
-    const submitApplication = ev => {
-        ev.preventDefault();
-        apply(id, firstName, lastName, email);
-    };
-    
-    return scholarship ? (
+    if (scholarship && scholarship.owner === account) owner = true;
+
+    console.log(scholarship);
+
+    return scholarship && scholarship.id !== '0' ? (
         <div className="container">
-            <OwnerAlert owner={scholarship.owner} />
+        {
+            owner && (<OwnerAlert />)
+        }
+            
             <div className="row">
                 <div className="col-md-8">
-                    <h6>Scholarship</h6>
+
+                    <div className="jumbotron">
+                        <h1 style={{'float':'right'}}><span className="badge badge-success">{web3.utils.fromWei(scholarship.amount)} ETH</span></h1>
+                        <h1 className="display-4">{scholarship.name}</h1>
+                        <p className="lead">{scholarship.description}</p>
+                        <hr className="my-4" />
+                        <p>This scholarship doesn't have any account requirements.</p>
+                    </div>
+
+                    {
+                        owner && (<ApplicantTable scholarshipId={scholarship.id} />)
+                    }
+
+                    {
+                        /*
+                        <h6>Scholarship</h6>
                     <h1>{scholarship.name}</h1>
+                    <p>{scholarship.description}</p>
+                        */
+                    }
                 </div>
                 <div className="col-md-4">
-                    <div className="card">
-                        <div className="card-header">
-                            Apply for Scholarship
-                        </div>
-                        <div className="card-body">
-                            <form onClick={submitApplication}>
-                                
-                                <div className="form-group">
-                                    <input type="text" placeholder="First Name" value={firstName} onChange={ev => updateFirstName(ev.target.value)} className="form-control" />
+                    {
+                        scholarship.owner === account ? (
+                            <div className="card">
+                                <div className="card-header">Owner Actions</div>
+                                <div className="card-body text-center">
+                                    <p className="mb-0">Your scholarship is currently live and accepting applicants.</p>
                                 </div>
-                                <div className="form-group">
-                                    <input type="text" placeholder="Last Name" value={lastName} onChange={ev => updateLastName(ev.target.value)} className="form-control" />
+                                <div className="card-footer">
+                                    <button className="btn btn-danger btn-block btn-sm" onClick={() => alert('Are you sure you want to deactivate this scholarship?')}>Deactivate Scholarship</button>
                                 </div>
-                                <div className="form-group">
-                                    <input type="email" placeholder="Email Address" value={email} onChange={ev => updateEmail(ev.target.value)} className="form-control" />
-                                </div>
-
-                                <button className="btn btn-success btn-block" type="submit">Submit Application</button>    
-
-                            </form>
-                        </div>
-                    </div>
+                            </div>
+                        ) : !user ? (
+                            <CreateAccount account={account} />
+                        ) : (
+                            <ApplyForm user={user} scholarshipId={scholarship.id} />
+                        )
+                    }
                 </div>
             </div>
         </div>
-    ) : (<h4>Loading scholarship...</h4>)
+    ) : (<h4 className="text-center mt-4">Loading scholarship...</h4>)
 
 };
 
