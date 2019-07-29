@@ -26,7 +26,7 @@ const CreateScholarship = props => {
     const create = ev => {
         ev.preventDefault();
         var value = web3.utils.toWei(amount,'ether');
-        send(name, description, '', (new Date().getTime() / 1000), { value });
+        send(name, description, (new Date().getTime() / 1000), { value });
         updateName('');
         updateAmount('');
         updateDescription('');

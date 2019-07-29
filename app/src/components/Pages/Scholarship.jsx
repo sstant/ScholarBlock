@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { drizzleReactHooks } from 'drizzle-react';
 import { OwnerAlert, ApplyForm, CreateAccount, ApplicantTable } from '../Elements';
 import web3 from 'web3';
@@ -63,9 +64,17 @@ const Scholarship = props => {
                             <ApplyForm user={user} scholarshipId={scholarship.id} />
                         )
                     }
+                    <div className="card mt-4">
+                        <div className="card-header">About the Funder</div>
+                        <div className="card-body text-center">
+                            <p className="mb-0">This scholarship was funded by.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    ) : scholarship && scholarship.id === '0' ? (
+        <Redirect to="/" />
     ) : (<h4 className="text-center mt-4">Loading scholarship...</h4>)
 
 };

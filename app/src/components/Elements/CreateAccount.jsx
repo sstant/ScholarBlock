@@ -93,7 +93,7 @@ const CreateAccount = ({ account }) => {
                     ) : (
                         <div className="row">
                             <div className="col-md-12">
-                                <p>Howdy, stranger. What kind of account do you want?</p>
+                                <p className="text-center">Howdy, stranger. <br />What kind of account do you want?</p>
                                 <button className="btn btn-block btn-primary" onClick={() => updateLevel('student')}>Apply for Scholarships</button>
                                 <p className="mb-2 mt-2 text-center">-  or -</p>
                                 <button className="btn btn-block btn-primary" onClick={() => updateLevel('funder')}>Fund Scholarships</button>

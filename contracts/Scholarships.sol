@@ -1,6 +1,10 @@
-pragma solidity >=0.4.21 <0.6.0;
+pragma solidity ^0.5.0;
+import "./Applicants.sol";
 
 contract Scholarships {
+
+    Applicants applicantsContract;
+    address applicantsAddress;
 
     uint public scholarshipCount = 0;
 
@@ -10,36 +14,42 @@ contract Scholarships {
         address owner;
         string description;
         bool active;
-        uint applicantCount;
+        //uint applicantCount;
         uint amount;
-        string essay;
         uint createdAt;
+        uint winner;
     }
-
-    constructor() public {
-        //create("Norfolk Athletes");
+    
+    constructor(address _applicantsAddress) public {
+        applicantsAddress = _applicantsAddress;
+        applicantsContract = Applicants(applicantsAddress);
     }
 
     mapping(uint => Scholarship) public scholarships;
-    mapping(uint => uint[]) public applicants;
 
-    function create(string memory _name, string memory description, string memory essay, uint createdAt) public payable {
+    event CreatedScholarship(uint id, string name, address owner, string description, bool active, uint amount);
+
+    function create(string memory _name, string memory description, uint createdAt) public payable {
         bytes memory name = bytes(_name);
         require(name.length != 0, "please provide a name");
+        // require sender has an account
         // require a minimum amount of wei
         scholarshipCount ++;
-        scholarships[scholarshipCount] = Scholarship(scholarshipCount, _name, msg.sender, description, true, 0, msg.value, essay, createdAt);
+        scholarships[scholarshipCount] = Scholarship(scholarshipCount, _name, msg.sender, description, true, msg.value, createdAt, 0);
+        emit CreatedScholarship(scholarshipCount, _name, msg.sender, description, true, msg.value);
     }
-
-    /*
-    function addApplicant(uint id, uint applicantId) public returns (uint) {
-        Scholarship storage scholarship = scholarships[id];
-        scholarship.applicantCount ++;
-        //uint[] storage current = applicants[id];
-        //current.push(applicantId);
-        //applicants[id] = current;
-        return scholarship.applicantCount;
+    
+    function selectWinner(uint scholarshipId, uint applicantId) public {
+        
+        // check that you are owner of scholarship;
+        Scholarship storage scholarship = scholarships[scholarshipId];
+        
+        scholarship.active = false;
+        scholarship.winner = applicantId;
+        
+        // this will pay user;
+        return applicantsContract.selectWinner(applicantId, scholarship.amount);
+        
     }
-    */
 
 }

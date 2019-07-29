@@ -1,15 +1,21 @@
-pragma solidity >=0.4.21 <0.6.0;
+pragma solidity ^0.5.0;
 
 contract Users {
 
+    enum UserLevel {
+        Student,
+        Funder
+    }
+
     struct User {
         uint id;
-        address wallet;
+        address payable wallet;
         string firstName;
         string lastName;
         string email;
-        string level;
+        UserLevel level;
         string organization;
+        uint earnings;
     }
 
     uint public userCount = 0;
@@ -17,9 +23,8 @@ contract Users {
     mapping(uint => User) public users;
     mapping(address => uint) public addressBook;
 
-    constructor() public {
-        //create("Sebastian","Stant","sebastianstant@gmail.com","funder","ETH Edu");
-    }
+    event CreatedAccount(address wallet, uint id);
+    event SentAmount(uint userId, uint amount);
 
     function create(
         string memory firstName, 
@@ -34,8 +39,23 @@ contract Users {
         require(_lastName.length != 0, "please provide a last name");
         require(_email.length != 0, "please provide an email address");
         userCount ++;
-        users[userCount] = User(userCount, msg.sender, firstName, lastName, email, level, organization);
+        users[userCount] = User(userCount, msg.sender, firstName, lastName, email, level, organization, 0);
         addressBook[msg.sender] = userCount;
+        //wallets[userCount] = msg.sender;
+        emit CreatedAccount(msg.sender, userCount);
+    }
+    
+    function sendAmount(uint userId, uint amount) public payable {
+        User storage user = users[userId];
+        //uint earnings = user.earnings;
+        //user.earnings += earnings + amount;
+        emit SentAmount(userId, amount);
+        return user.wallet.transfer(amount);
+    }
+
+    function getUserLevel(uint userId) public returns(string memory level) {
+        User memory user = users[userId];
+        return user.level;
     }
     
 }

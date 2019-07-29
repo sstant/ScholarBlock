@@ -24,7 +24,7 @@ const ApplicantTable = ({ scholarshipId }) => {
                 </thead>
                 <tbody>
                     {
-                        applicants.map(id => (<ApplicantRow key={id} id={id} />))
+                        applicants.map(id => (<ApplicantRow key={id} id={id} scholarshipId={scholarshipId} />))
                     }
                 </tbody>
                 </table>

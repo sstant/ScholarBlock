@@ -1,11 +1,9 @@
-pragma solidity >=0.4.21 <0.6.0;
-import * as Scholarships from "./Scholarships.sol";
-import * as Users from "./Users.sol";
-import "./SharedStructs.sol";
+pragma solidity ^0.5.0;
+import "./Users.sol";
 
 contract Applicants {
 
-    address scholarshipsAddress;
+    Users usersContract;
     address usersAddress;
 
     uint public applicantCount = 0;
@@ -18,9 +16,16 @@ contract Applicants {
         bool winner;
     }
 
+    event CreatedApplicant(uint id);
+
     mapping(uint => Applicant) public applicants;
     mapping(uint => Applicant[]) public listApplicants;
     mapping(uint => uint[]) public userIds;
+    
+    constructor(address _usersAddress) public {
+        usersAddress = _usersAddress;
+        usersContract = Users(usersAddress);
+    }
 
     function getAllApplications(uint scholarshipId) public view returns (uint[] memory) {
         uint length = listApplicants[scholarshipId].length;
@@ -33,7 +38,23 @@ contract Applicants {
         return payload;
     }
 
-    function create(uint userId, uint scholarshipId, uint createdAt) public {
+    modifier onlyStudent {
+        uint userId = usersContract.addressBook(msg.sender);
+        require(userId != 0, "Could not find a user at this address.");
+
+        string memory userLevel = usersContract.getUserLevel(userId);
+        require(userLevel == "student", "Must apply from a student account");
+        _;
+    }
+
+    function create(uint scholarshipId, uint createdAt) public onlyStudent {
+
+        uint userId = usersContract.addressBook(msg.sender);
+        require(userId != 0, "Could not find a user at this address.");
+
+        string memory userLevel = usersContract.getUserLevel(userId);
+        require(userLevel == "student", "Must apply from a student account");
+        
         applicantCount ++;
         applicants[applicantCount] = Applicant(applicantCount, userId, scholarshipId, createdAt, false);
         Applicant[] storage list = listApplicants[scholarshipId];
@@ -41,28 +62,17 @@ contract Applicants {
 
         uint[] storage _userIds = userIds[scholarshipId];
         _userIds.push(userId);
-        //scholarshipsContract.addApplicant(scholarshipId, applicantCount);
+        emit CreatedApplicant(applicantCount);
     }
-
-    /*
-    function selectWinner(uint applicantId) public returns (bool) {
-        
-        // check that you are owner of scholarship;
-
+    
+    function getUserId(uint applicantId) public view returns (uint) {
+        return applicants[applicantId].userId;
+    }
+    
+    function selectWinner(uint applicantId, uint amount) public {
         Applicant storage applicant = applicants[applicantId];
-
-
-
-        Scholarships.Scholarship storage scholarship = Scholarships.scholarships(applicant.scholarshipId);
-        Users.User storage user = Users.users(applicant.userId);
-
-        address wallet = user.wallet;
-        wallet.trasnfer(scholarship.amount);
-
         applicant.winner = true;
-        return true;
+        return usersContract.sendAmount(applicant.userId, amount);
     }
-    */
-
 
 }
