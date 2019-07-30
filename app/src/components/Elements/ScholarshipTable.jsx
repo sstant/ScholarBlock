@@ -34,7 +34,7 @@ const ScholarshipTable = () => {
     ) : (
         <div className="row mt-4">
             <div className="col-md-12 text-center">
-                <h3 className="font-weight-light">There are currently no scholarships available at this address.</h3>
+                <h4 className="font-weight-light">There are currently no scholarships available at this address.</h4>
                 <img src={emptyPiggyBank} alt="Empty Piggy Bank" width="240" />
             </div>
         </div>

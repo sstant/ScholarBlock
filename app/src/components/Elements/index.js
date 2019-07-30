@@ -11,6 +11,8 @@ import ApplicantTable from './ApplicantTable';
 import ApplicantRow from './ApplicantRow';
 import ApplicantInfo from './ApplicantInfo';
 import LoadingRow from './LoadingRow';
+import CreateStudent from './CreateStudent';
+import CreateFunder from './CreateFunder';
 
 export {
     ScholarshipTable,
@@ -25,5 +27,7 @@ export {
     ApplicantTable,
     ApplicantRow,
     ApplicantInfo,
-    LoadingRow
+    LoadingRow,
+    CreateStudent,
+    CreateFunder
 }

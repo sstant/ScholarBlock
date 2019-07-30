@@ -40,15 +40,19 @@ contract Scholarships {
     }
     
     function selectWinner(uint scholarshipId, uint applicantId) public {
-        
+
         // check that you are owner of scholarship;
-        Scholarship storage scholarship = scholarships[scholarshipId];
-        
+        Scholarship memory scholarship = scholarships[scholarshipId];
+        require(msg.sender == scholarship.owner, "You are not the owner of this scholarship."); 
+                
         scholarship.active = false;
         scholarship.winner = applicantId;
+
+        //log0(scholarshipId);
+        //log0(applicantId);
         
         // this will pay user;
-        return applicantsContract.selectWinner(applicantId, scholarship.amount);
+        //return applicantsContract.selectWinner(applicantId, scholarship.amount);
         
     }
 

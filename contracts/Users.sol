@@ -23,39 +23,55 @@ contract Users {
     mapping(uint => User) public users;
     mapping(address => uint) public addressBook;
 
-    event CreatedAccount(address wallet, uint id);
-    event SentAmount(uint userId, uint amount);
+    event CreatedAccount(address wallet, uint id, UserLevel level);
 
-    function create(
-        string memory firstName, 
-        string memory lastName, 
-        string memory email, 
-        string memory level, 
-        string memory organization) public payable {
+    modifier checkUserInfo(
+        string memory firstName,
+        string memory lastName,
+        string memory email
+    ) {
         bytes memory _firstName = bytes(firstName);
         bytes memory _lastName = bytes(lastName);
         bytes memory _email = bytes(email);
         require(_firstName.length != 0, "please provide a first name");
         require(_lastName.length != 0, "please provide a last name");
         require(_email.length != 0, "please provide an email address");
-        userCount ++;
-        users[userCount] = User(userCount, msg.sender, firstName, lastName, email, level, organization, 0);
-        addressBook[msg.sender] = userCount;
-        //wallets[userCount] = msg.sender;
-        emit CreatedAccount(msg.sender, userCount);
-    }
-    
-    function sendAmount(uint userId, uint amount) public payable {
-        User storage user = users[userId];
-        //uint earnings = user.earnings;
-        //user.earnings += earnings + amount;
-        emit SentAmount(userId, amount);
-        return user.wallet.transfer(amount);
+        _;
     }
 
-    function getUserLevel(uint userId) public returns(string memory level) {
+    function createFunder(
+        string memory firstName, 
+        string memory lastName, 
+        string memory email,
+        string memory organization
+    ) public payable checkUserInfo(firstName, lastName, email) {
+        bytes memory _organization = bytes(organization);
+        require(_organization.length != 0, "please provide an organization name");
+        userCount ++;
+        addressBook[msg.sender] = userCount;
+        users[userCount] = User(userCount, msg.sender, firstName, lastName, email, UserLevel.Funder, organization, 0);
+        emit CreatedAccount(msg.sender, userCount, UserLevel.Funder);
+    }
+
+    function createStudent(
+        string memory firstName, 
+        string memory lastName, 
+        string memory email
+    ) public payable checkUserInfo(firstName, lastName, email) {
+        userCount ++;
+        addressBook[msg.sender] = userCount;
+        users[userCount] = User(userCount, msg.sender, firstName, lastName, email, UserLevel.Student, '', 0);
+        emit CreatedAccount(msg.sender, userCount, UserLevel.Student);
+    }
+
+    function getUserWallet(uint userId) view public returns (address payable) {
         User memory user = users[userId];
-        return user.level;
+        return user.wallet;
+    }
+
+    function getUserLevel(uint userId) view public returns(uint level) {
+        User memory user = users[userId];
+        return uint(user.level);
     }
     
 }

@@ -1,31 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { drizzleReactHooks } from 'drizzle-react';
+import { parseError } from '../../helpers';
 
 const ApplyForm = ({ scholarshipId, user }) => {
 
-    const [applied, setApplied] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const { useCacheSend } = drizzleReactHooks.useDrizzle();
-    
+    const { useCacheSend, useCacheCall } = drizzleReactHooks.useDrizzle();
+
+    const hasApplied = useCacheCall('Applicants', 'hasApplied', user.id, scholarshipId);
     const { send, TXObjects } = useCacheSend('Applicants', 'create');
 
     const submitApplication = ev => {
         ev.preventDefault();
-        const userId = user.id;
-        send(userId, scholarshipId, (new Date().getTime() / 1000));
+        send(scholarshipId);
     };
 
     useEffect(() => {
-        if (TXObjects && TXObjects.length > 0 && TXObjects[TXObjects.length - 1] && TXObjects[TXObjects.length - 1].status === 'success') setApplied(true);
-    }, [TXObjects])
+        if (TXObjects && TXObjects.length > 0 && TXObjects[TXObjects.length - 1] && TXObjects[TXObjects.length - 1].status === 'error') {
+            setErrorMessage(parseError(TXObjects[TXObjects.length - 1].error.message));
+        };
+    }, [TXObjects]);
 
-    return applied ? (
+    return hasApplied ? (
         <div className="card">
             <div className="card-header">
                 Application Sent
             </div>
             <div className="card-body text-center">
-                <p className="margin-bottom">You've submitted your application for this scholarship. Sit back and relax!</p>
+                <p className="mb-0">You've submitted your application for this scholarship. Sit back and relax!</p>
             </div>
         </div>
     )  : (
@@ -38,6 +41,13 @@ const ApplyForm = ({ scholarshipId, user }) => {
                 <p><strong>First Name:</strong> {user.firstName}</p>
                 <p><strong>Last Name:</strong> {user.lastName}</p>
                 <p className="mb-0"><strong>Email Address:</strong> {user.email}</p>
+                {
+                    errorMessage && (
+                        <div className="alert alert-danger text-center mb-0 mt-2">
+                            {errorMessage}
+                        </div>
+                    )
+                }
             </div>
             <div className="card-footer">
                 <button onClick={submitApplication} className="btn btn-success btn-block" type="submit">Submit Application</button>

@@ -36,7 +36,7 @@ const CreateScholarship = props => {
     console.log('RENDERING');
 
     return (
-        <div className="card mt-4">
+        <div className="card mt-4 mb-4">
         <div className="card-header">
             Create a Scholarship
         </div>

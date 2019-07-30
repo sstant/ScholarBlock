@@ -38,13 +38,6 @@ const Scholarship = props => {
                         owner && (<ApplicantTable scholarshipId={scholarship.id} />)
                     }
 
-                    {
-                        /*
-                        <h6>Scholarship</h6>
-                    <h1>{scholarship.name}</h1>
-                    <p>{scholarship.description}</p>
-                        */
-                    }
                 </div>
                 <div className="col-md-4">
                     {

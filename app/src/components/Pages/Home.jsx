@@ -14,7 +14,7 @@ const Home = ({ account, user }) => {
                         user ? (<YourAccount account={account} user={user} />) : (<CreateAccount account={account} />)
                     }
                     {
-                        user && user.level === 'funder' && (<CreateScholarship />)
+                        user && user.level === '1' && (<CreateScholarship />)
                     }
                     
                 </div>
