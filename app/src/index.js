@@ -13,6 +13,10 @@ import './styles/main.css';
 const drizzleStore = generateStore(options);
 const drizzle = new Drizzle(options, drizzleStore);
 
+window.ethereum.on('accountsChanged', function (accounts) {
+  window.location.reload();
+})
+
 ReactDOM.render(
 <drizzleReactHooks.DrizzleProvider drizzle={drizzle}>
    <Loading>

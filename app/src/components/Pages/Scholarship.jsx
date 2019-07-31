@@ -15,16 +15,14 @@ const Scholarship = props => {
 
     if (scholarship && scholarship.owner === account) owner = true;
 
-    console.log(scholarship);
-
     return scholarship && scholarship.id !== '0' ? (
         <div className="container">
-        {
-            owner && (<OwnerAlert />)
-        }
-            
             <div className="row">
                 <div className="col-md-8">
+
+                    {
+                        owner && (<OwnerAlert />)
+                    }
 
                     <div className="jumbotron">
                         <h1 style={{'float':'right'}}><span className="badge badge-success">{web3.utils.fromWei(scholarship.amount)} ETH</span></h1>
@@ -52,7 +50,7 @@ const Scholarship = props => {
                             <ApplyForm user={user} scholarship={scholarship} />
                         )
                     }
-                    <AboutFunder userId={scholarship.owner} />
+                    <AboutFunder scholarship={scholarship} />
                 </div>
             </div>
         </div>

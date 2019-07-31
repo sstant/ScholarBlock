@@ -9,8 +9,6 @@ const ScholarshipRow = props => {
     const { useCacheCall } = drizzleReactHooks.useDrizzle();
     const scholarship = useCacheCall('Scholarships', 'scholarships', props.id);
 
-    console.log(scholarship);
-
     return scholarship ? (
         <tr onClick={() => props.history.push(`/scholarships/${props.id}`)}>
             <th scope="row">{scholarship.name}</th>
@@ -20,7 +18,7 @@ const ScholarshipRow = props => {
             <td align="right">{
                 scholarship.winner !== "0" ? (<span className="badge badge-success">Awarded</span>) : 
                 scholarship.active ? (<span className="badge badge-primary">Active</span>) :
-                (<span className="badge">Inactive</span>)
+                (<span className="badge badge-secondary">Inactive</span>)
             }</td>
         </tr>
     ) : (<tr>

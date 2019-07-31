@@ -6,11 +6,11 @@ const OwnerActions = ({ scholarship }) => {
 
     const { useCacheSend } = drizzleReactHooks.useDrizzle();
 
-    const { send, TXObjects } = useCacheSend('Scholarships', 'disableScholarship', scholarship.id);
+    const { send } = useCacheSend('Scholarships', 'disableScholarship');
 
     const disableScholarship = () => {
         if (window.confirm("Are you sure you want to deactivate this scholarship?")) {
-            send();
+            send(scholarship.id);
         };
     }
 
