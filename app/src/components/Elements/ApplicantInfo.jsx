@@ -1,20 +1,22 @@
-import React from 'react';
-import { drizzleReactHooks } from 'drizzle-react';
+import React, { useCallback } from 'react';
 import { LoadingRow } from './';
-import ChooseWinner from './ChooseWinner';
+import { drizzleReactHooks } from 'drizzle-react';
 
-const ApplicantInfo = ({ scholarshipId, applicantId, userId }) => {
+const ApplicantInfo = ({ applicant, scholarshipId }) => {
 
-    const { useCacheCall } = drizzleReactHooks.useDrizzle();
-    const user = useCacheCall('Users', 'users', userId);
+    const { useCacheSend } = drizzleReactHooks.useDrizzle();
+    const { send } = useCacheSend('Scholarships', 'selectWinner');
 
-    return user ? (
+    console.log(applicant.id);
+    console.log(scholarshipId);
+
+    return applicant ? (
         <tr>
-            <th scope="row">{user.firstName}</th>
-            <td>{user.lastName}</td>
-            <td>{user.email}</td>
+            <th scope="row">{applicant.firstName}</th>
+            <td>{applicant.lastName}</td>
+            <td>{applicant.email}</td>
             <td className="text-right">
-                <ChooseWinner scholarshipId={scholarshipId} applicantId={applicantId} />
+                <button className="btn btn-success btn-sm" onClick={useCallback(() => send(applicant.id, scholarshipId))}>Choose as Winner</button>
             </td>
         </tr>
     ) : (<LoadingRow colSpan={4} />)

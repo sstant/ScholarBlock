@@ -20,8 +20,6 @@ const App = props => {
 
   const userCall = useCacheCall('Users', 'users', userId || 0);
   if (userCall && userCall.id !== '0') user = userCall;
-
-  console.log(user);
   
   return (
     <React.Fragment>

@@ -15,8 +15,6 @@ const Scholarship = props => {
 
     if (scholarship && scholarship.owner === account) owner = true;
 
-    console.log(scholarship);
-
     return scholarship && scholarship.id !== '0' ? (
         <div className="container">
         {

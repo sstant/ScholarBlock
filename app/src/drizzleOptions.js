@@ -1,6 +1,5 @@
-import Scholarships from "./contracts/Scholarships.json";
-import Applicants from "./contracts/Applicants.json";
 import Users from "./contracts/Users.json";
+import Scholarships from "./contracts/Scholarships.json";
 
 const options = {
   web3: {
@@ -10,7 +9,7 @@ const options = {
       url: "ws://127.0.0.1:8545",
     },
   },
-  contracts: [Scholarships, Applicants, Users],
+  contracts: [Users, Scholarships],
   events: {
     SimpleStorage: ["StorageSet"],
   },

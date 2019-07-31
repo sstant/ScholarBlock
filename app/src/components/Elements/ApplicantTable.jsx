@@ -5,15 +5,16 @@ import { ApplicantRow } from './';
 const ApplicantTable = ({ scholarshipId }) => {
 
     const { useCacheCall } = drizzleReactHooks.useDrizzle();
-   const applicants = useCacheCall('Applicants', 'getAllApplications', scholarshipId) || [];
+    
+   const applicants = useCacheCall('Scholarships', 'listApplicants', scholarshipId);
 
-    return applicants.length > 0 ? (
+    return (applicants || []).length > 0 ? (
         <div className="card">
             <div className="card-header">
                 {applicants.length} Applicants
             </div>
             <div className="card-body p-0">
-            <table className="table">
+            <table className="table mb-0">
                 <thead>
                     <tr>
                         <th scope="col">First Name</th>

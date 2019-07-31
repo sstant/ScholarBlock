@@ -2,6 +2,8 @@ pragma solidity ^0.5.0;
 
 contract Users {
 
+    /** VARIABLES */
+
     enum UserLevel {
         Student,
         Funder
@@ -20,10 +22,15 @@ contract Users {
 
     uint public userCount = 0;
 
+    // users should ideally not be public
     mapping(uint => User) public users;
     mapping(address => uint) public addressBook;
 
+    /** EVENTS */
+
     event CreatedAccount(address wallet, uint id, UserLevel level);
+
+    /** MODIFIERS */
 
     modifier checkUserInfo(
         string memory firstName,
@@ -38,6 +45,8 @@ contract Users {
         require(_email.length != 0, "please provide an email address");
         _;
     }
+
+    /** FUNCTIONS */
 
     function createFunder(
         string memory firstName, 
@@ -62,6 +71,13 @@ contract Users {
         addressBook[msg.sender] = userCount;
         users[userCount] = User(userCount, msg.sender, firstName, lastName, email, UserLevel.Student, '', 0);
         emit CreatedAccount(msg.sender, userCount, UserLevel.Student);
+    }
+
+    function getUser(uint userId) view public returns (uint id, string memory firstName, string memory lastName, string memory email) {
+        firstName = users[userId].firstName;
+        lastName = users[userId].lastName;
+        email = users[userId].email;
+        return (userId, firstName, lastName, email);
     }
 
     function getUserWallet(uint userId) view public returns (address payable) {

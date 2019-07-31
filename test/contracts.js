@@ -1,19 +1,19 @@
 var Users = artifacts.require("./Users.sol");
 var Scholarships = artifacts.require("./Scholarships.sol");
-const Applicants = artifacts.require("./Applicants.sol");
 //var expectThrow = require('./helper.js');
 
 let funderId;
 let studentId;
-let applicantId;
 let scholarshipId;
 
-contract('Users', function(accounts) {
+contract('ScholarBlock', function(accounts) {
 
     let usersInstance;
+    let scholarshipsInstance;
 
     beforeEach('setup contract for each test', async function () {
         usersInstance = await Users.deployed();
+        scholarshipsInstance = await Scholarships.deployed(usersInstance.address);
     });
 
     it("...countUsers should return a count of 0 users", async () => {
@@ -32,7 +32,6 @@ contract('Users', function(accounts) {
             'Organization Name',
             {from: accounts[1]});
 
-        console.log(tx.logs[0].args.id);
         funderId = tx.logs[0].args.id;
         
         assert.exists(tx, "Should successfully create transaction.");
@@ -48,7 +47,6 @@ contract('Users', function(accounts) {
             'sebastianstant@gmail.com',
             {from: accounts[2]});
             
-        console.log(tx.logs[0].args.id);
         studentId = tx.logs[0].args.id;
 
         assert.exists(tx, "Should successfully create transaction.");
@@ -63,32 +61,26 @@ contract('Users', function(accounts) {
 
     });
 
-});
-
-contract('Scholarships', function(accounts) {
-
-    let scholarshipsInstance;
-
-    beforeEach('setup contract for each test', async function () {
-        scholarshipsInstance = await Scholarships.deployed();
-    });
-
-    it("...scholarshipCount should return a count of 0 users", async () => {
+    it("...scholarshipCount should return a count of 0 scholarships", async () => {
 
         const count = await scholarshipsInstance.scholarshipCount.call();
         assert.equal(count.toNumber(), 0, 'should return 0 scholarships');
 
     });
 
+    // should error if no user
+    // should error if no funder
+    // should error if no/long title
+    // should error if no/long description
+    // should error with no/low amount
+
     it("...should create a scholarship", async () => {
 
         const tx = await scholarshipsInstance.create(
-            'Test',
-            'Test',
-            new Date().getTime(),
+            'Test Name',
+            'This is a test description...',
             {from: accounts[1]});
 
-        console.log(tx.logs[0].args.id);
         scholarshipId = tx.logs[0].args.id;
         
         assert.exists(tx, "Should successfully create transaction.");
@@ -96,56 +88,74 @@ contract('Scholarships', function(accounts) {
 
     });
 
-});
+    it("...scholarshipCount should return a count of 1 scholarships", async () => {
 
-contract('Applicants', function(accounts) {
-
-    let applicantsInstance;
-
-    beforeEach('setup contract for each test', async function () {
-        applicantsInstance = await Applicants.deployed();
-    });
-
-    it("...applicantCount should return a count of 0 applicants", async () => {
-
-        const count = await applicantsInstance.applicantCount.call();
-        assert.equal(count.toNumber(), 0, 'should return 0 applicantCount');
+        const count = await scholarshipsInstance.scholarshipCount.call();
+        assert.equal(count.toNumber(), 1, 'should return 0 scholarships');
 
     });
 
-    it("...should store vars", async () => {
-        console.log(studentId, 'student id');
-        console.log(funderId, 'funder id');
-        console.log(scholarshipId, 'scholarship id');
-    });
+    // should error if no user
+    // should error if no student
 
-    /*
-    it("...should get a scholarship id from helper", async () => {
-        scholarshipId = await getScholarshipId(1);
-        console.log(scholarshipId);
-        assert.exists(scholarshipId, 'Should successfully get a scholarship ID.');
-    });
+    it("...should apply for a scholarship", async () => {
 
-    it("...should get a user id from helper", async () => {
-        userId = await getUserId(1);
-        console.log(userId, 'userId');
-        assert.exists(userId, 'Should successfully get a user ID.');
-    });
-    */
-
-    /*
-    it("...should create an applicant", async () => {
-        const tx = await applicantsInstance.create(
-            userId,
+        const tx = await scholarshipsInstance.applyForScholarship(
             scholarshipId,
-            new Date().getTime(),
             {from: accounts[2]});
         
         assert.exists(tx, "Should successfully create transaction.");
-        assert.equal(tx.logs[0].event, "CreatedApplicant", "Should emit a CreatedApplicant event.");
+        assert.equal(tx.logs[0].event, "ApplyForScholarship", "Should emit a ApplyForScholarship event.");
+
+    });
+
+    it("...should return a list of applicants", async () => {
+
+        const applicants = await scholarshipsInstance.listApplicants(
+            scholarshipId,
+            {from: accounts[1]});
+        
+        console.log(applicants);
+        
+        assert.equal(applicants.length, 1, "Should return 1 applicant");
+
+    });
+
+    it("...should select a winner", async () => {
+
+        const tx = await scholarshipsInstance.selectWinner(
+            studentId,
+            scholarshipId,
+            {from: accounts[2]});
+        
+        assert.exists(tx, "Should successfully create transaction.");
+        assert.equal(tx.logs[0].event, "SelectedWinner", "Should emit a SelectedWinnner event.");
+
+    });
+
+    // fetch updated info on scholarship
+
+    /*
+
+    it("...should get applicant information", async () => {
+
+        const applicant = await scholarshipsInstance.getApplicant(
+            scholarshipId,
+            studentId,
+            {from: accounts[1]});
+        
+        console.log(applicant);
+        
+        assert.exists(applicant, "Should return applicant info.");
+
     });
     */
-    
+
+    // scholarship details should be updated
+    // hasApplied
+    // should fetch list of scholarship applicants
+    // should should individual user
+
 
 
 });

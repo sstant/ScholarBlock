@@ -11,6 +11,7 @@ module.exports = {
       network_id: "*" // Match any network id
     }
   },
+  plugins: ["truffle-security"],
   compilers: {
     solc: {
       optimizer: {
