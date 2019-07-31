@@ -8,8 +8,6 @@ const ApplicantTable = ({ scholarshipId }) => {
     
    const applicants = useCacheCall('Scholarships', 'listApplicants', scholarshipId);
 
-   console.log(applicants);
-
     return (applicants || []).length > 0 ? (
         <div className="card">
             <div className="card-header">

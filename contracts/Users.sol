@@ -22,6 +22,7 @@ contract Users {
 
     uint public userCount = 0;
 
+    // users should ideally not be public
     mapping(uint => User) public users;
     mapping(address => uint) public addressBook;
 

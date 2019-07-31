@@ -7,12 +7,7 @@ const ApplicantRow = ({ id, scholarshipId }) => {
     const { useCacheCall } = drizzleReactHooks.useDrizzle();
     const applicant = useCacheCall('Scholarships', 'getApplicant', scholarshipId, id);
 
-    console.log(applicant);
-
-    return applicant ? (<ApplicantInfo applicant={{
-        ...applicant,
-        id: id
-    }} scholarsahipId={scholarshipId} />) : (<LoadingRow colSpan={4} />)
+    return applicant ? (<ApplicantInfo applicant={applicant} scholarshipId={scholarshipId} />) : (<LoadingRow colSpan={4} />)
 
 }
 

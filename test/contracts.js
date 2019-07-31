@@ -128,10 +128,8 @@ contract('ScholarBlock', function(accounts) {
             scholarshipId,
             {from: accounts[2]});
         
-        console.log(tx);
-        
         assert.exists(tx, "Should successfully create transaction.");
-        assert.equal(tx.logs[0].event, "SelectedWinnner", "Should emit a SelectedWinnner event.");
+        assert.equal(tx.logs[0].event, "SelectedWinner", "Should emit a SelectedWinnner event.");
 
     });
 

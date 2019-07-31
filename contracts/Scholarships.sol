@@ -117,10 +117,22 @@ contract Scholarships is Users {
 
     // make sure owner of 
     // only owner of scholarship
-    function getApplicant(uint scholarshipId, uint userId) public view returns (string memory firstName, string memory lastName, string memory email) {
+    function getApplicant(uint scholarshipId, uint userId) public view returns (uint id, string memory firstName, string memory lastName, string memory email) {
         // potential issue with looping
         require(hasApplied(userId, scholarshipId), "User has not applied to this scholarship.");
-        usersContract.getUser(userId);
+        
+        // id = usersContract.getUser(userId).id;
+        // firstName = usersContract.getUser(userId).firstName;
+        // lastName = usersContract.getUser(userId).lastName;
+        // email = usersContract.getUser(userId).email;
+
+        
+        //firstName = usersContract.users.call(userId).firstName;
+        //lastName = usersContract.users(userId).lastName;
+        //email = usersContract.users(userId).email;
+    
+
+        return usersContract.getUser(userId);
     }
 
     function selectWinner(uint userId, uint scholarshipId) public {
