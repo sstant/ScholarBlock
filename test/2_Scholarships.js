@@ -109,6 +109,30 @@ contract('Scholarships', function(accounts) {
 
     });
 
+    it("should select a winner", async () => {
+
+        const tx = await scholarshipsInstance.selectWinner(
+            studentId,
+            scholarshipId,
+            {from: accounts[1]});
+        
+        assert.exists(tx, "Should successfully create transaction.");
+        assert.equal(tx.logs[0].event, "SelectedWinner", "Should emit a SelectedWinnner event.");
+
+    });
+
+    it("should throw error disabling inactive scholarship", async () => {
+
+        try {
+            await scholarshipsInstance.disableScholarship(
+                scholarshipId,
+                {from: accounts[1]});
+        } catch(err) {
+            assert.exists(err, "Should throw error.");
+        }
+        
+    });
+
     describe("should throw error", () => {
 
         it("if not scholarship owner", async () => {
@@ -127,17 +151,7 @@ contract('Scholarships', function(accounts) {
 
     });
 
-    it("should select a winner", async () => {
-
-        const tx = await scholarshipsInstance.selectWinner(
-            studentId,
-            scholarshipId,
-            {from: accounts[1]});
-        
-        assert.exists(tx, "Should successfully create transaction.");
-        assert.equal(tx.logs[0].event, "SelectedWinner", "Should emit a SelectedWinnner event.");
-
-    });
+    
 
     // fetch updated info on scholarship
 

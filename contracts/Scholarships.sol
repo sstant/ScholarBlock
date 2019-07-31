@@ -30,6 +30,7 @@ contract Scholarships {
     event CreatedScholarship(uint id, string name, address owner, string description, uint amount);
     event ApplyForScholarship(uint userId, uint scholarshipId);
     event SelectedWinner(uint userId, uint scholarshipId, uint amount);
+    event DisabledScholarship(uint scholarshipId, uint amount);
 
     modifier isStudent() {
         uint userId = usersContract.addressBook(msg.sender);
@@ -137,6 +138,15 @@ contract Scholarships {
 
         emit SelectedWinner(userId, scholarshipId, scholarships[scholarshipId].amount);
 
+    }
+
+    function disableScholarship(uint scholarshipId) 
+    public payable 
+    ownsScholarship(scholarshipId) {
+        require(scholarships[scholarshipId].active, "This scholarship is already inactive.");
+        scholarships[scholarshipId].active = false;
+        msg.sender.transfer(scholarships[scholarshipId].amount);
+        emit DisabledScholarship(scholarshipId, scholarships[scholarshipId].amount);
     }
 
 }

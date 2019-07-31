@@ -56,7 +56,6 @@ const CreateScholarship = props => {
                         <option>Female</option>
                         <option>Nonbinary</option>
                         <option>Other</option>
-                        <option>Prefer Not to Say</option>
                     </select>
                 </div>
                 <div className="form-group">
@@ -70,7 +69,6 @@ const CreateScholarship = props => {
                         <option>Hispanic</option>
                         <option>Mixed</option>
                         <option>Native Hawaiian/Pacific Islander</option>
-                        <option>Prefer Not to Say</option>
                         <option>White</option>
                     </select>
                 </div>
