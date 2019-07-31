@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { drizzleReactHooks } from 'drizzle-react';
-import { OwnerAlert, ApplyForm, CreateAccount, ApplicantTable } from '../Elements';
+import { OwnerAlert, ApplyForm, CreateAccount, ApplicantTable, OwnerActions } from '../Elements';
 import web3 from 'web3';
 
 const Scholarship = props => {
@@ -14,6 +14,8 @@ const Scholarship = props => {
     const scholarship = useCacheCall('Scholarships', 'scholarships', id);
 
     if (scholarship && scholarship.owner === account) owner = true;
+
+    console.log(scholarship);
 
     return scholarship && scholarship.id !== '0' ? (
         <div className="container">
@@ -29,26 +31,22 @@ const Scholarship = props => {
                         <h1 className="display-4">{scholarship.name}</h1>
                         <p className="lead">{scholarship.description}</p>
                         <hr className="my-4" />
-                        <p>This scholarship doesn't have any account requirements.</p>
+                        {
+                            /*
+                            <p>This scholarship doesn't have any account requirements.</p>
+                            */
+                        }
                     </div>
 
                     {
-                        owner && (<ApplicantTable scholarshipId={scholarship.id} />)
+                        owner && (<ApplicantTable scholarship={scholarship} />)
                     }
 
                 </div>
                 <div className="col-md-4">
                     {
                         scholarship.owner === account ? (
-                            <div className="card">
-                                <div className="card-header">Owner Actions</div>
-                                <div className="card-body text-center">
-                                    <p className="mb-0">Your scholarship is currently live and accepting applicants.</p>
-                                </div>
-                                <div className="card-footer">
-                                    <button className="btn btn-danger btn-block btn-sm" onClick={() => alert('Are you sure you want to deactivate this scholarship?')}>Deactivate Scholarship</button>
-                                </div>
-                            </div>
+                            <OwnerActions scholarship={scholarship} />
                         ) : !user ? (
                             <CreateAccount account={account} />
                         ) : (

@@ -13,6 +13,7 @@ import ApplicantInfo from './ApplicantInfo';
 import LoadingRow from './LoadingRow';
 import CreateStudent from './CreateStudent';
 import CreateFunder from './CreateFunder';
+import OwnerActions from './OwnerActions';
 
 export {
     ScholarshipTable,
@@ -29,5 +30,6 @@ export {
     ApplicantInfo,
     LoadingRow,
     CreateStudent,
-    CreateFunder
+    CreateFunder,
+    OwnerActions
 }

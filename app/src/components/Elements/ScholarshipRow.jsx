@@ -14,6 +14,11 @@ const ScholarshipRow = props => {
             <th scope="row">{scholarship.name}</th>
             <td>{moment(scholarship.createdAt * 1000).format('MM/DD/YY')}</td>
             <td>{web3.utils.fromWei(scholarship.amount)} ETH</td>
+            <td>{
+                scholarship.winner ? (<span className="badge badge-success">Awarded</span>) : 
+                scholarship.active ? (<span className="badge badge-primary">Active</span>) :
+                (<span className="badge">Inactive</span>)
+            }</td>
         </tr>
     ) : (<tr>
         <td colSpan="3" className="text-center">Loading...</td>

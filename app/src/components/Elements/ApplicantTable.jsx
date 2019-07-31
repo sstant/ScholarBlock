@@ -2,11 +2,11 @@ import React from 'react';
 import { drizzleReactHooks } from 'drizzle-react';
 import { ApplicantRow } from './';
 
-const ApplicantTable = ({ scholarshipId }) => {
+const ApplicantTable = ({ scholarship }) => {
 
     const { useCacheCall } = drizzleReactHooks.useDrizzle();
     
-   const applicants = useCacheCall('Scholarships', 'listApplicants', scholarshipId);
+   const applicants = useCacheCall('Scholarships', 'listApplicants', scholarship.id);
 
     return (applicants || []).length > 0 ? (
         <div className="card">
@@ -25,7 +25,7 @@ const ApplicantTable = ({ scholarshipId }) => {
                 </thead>
                 <tbody>
                     {
-                        applicants.map(id => (<ApplicantRow key={id} id={id} scholarshipId={scholarshipId} />))
+                        applicants.map(id => (<ApplicantRow key={id} id={id} scholarship={scholarship} />))
                     }
                 </tbody>
                 </table>

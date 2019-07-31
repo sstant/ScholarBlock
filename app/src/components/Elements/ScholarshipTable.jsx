@@ -12,7 +12,7 @@ const ScholarshipTable = () => {
     return count > 0 ? (
         <div className="card">
             <div className="card-header">
-                Active Scholarships ({count})
+                All Scholarships ({count})
             </div>
             <div className="card-body p-0">
             <table className="table">
@@ -21,6 +21,7 @@ const ScholarshipTable = () => {
                         <th scope="col">Name</th>
                         <th scope="col">Created</th>
                         <th scope="col">Award</th>
+                        <th scope="col">Status</th>
                     </tr>
                 </thead>
                 <tbody>
