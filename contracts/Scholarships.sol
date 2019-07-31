@@ -1,6 +1,8 @@
 pragma solidity ^0.5.0;
 import "./Users.sol";
 
+/// @title Scholarship storage for ScholarBlock
+/// @author Sebastian Stant
 contract Scholarships {
 
     address payable private admin;
@@ -162,6 +164,8 @@ contract Scholarships {
         emit DisabledScholarship(scholarshipId, scholarships[scholarshipId].amount);
     }
 
+    /** @dev Destroys the contract & sends balance to admin.
+      */
     function close() public isAdmin {
         selfdestruct(admin);
     }

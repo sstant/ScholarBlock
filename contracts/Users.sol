@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-/// @title Accounts for ScholarBlock
+/// @title Account storage for ScholarBlock
 /// @author Sebastian Stant
 /// @notice Anyone can create a student or funder account
 /// @dev Account data is not currently protected or verified
@@ -59,6 +59,12 @@ contract Users {
         revert();
     }
 
+    /** @dev Creates an account at the Funder level.
+      * @param firstName First name of the funder.
+      * @param lastName Last name of the funder.
+      * @param email Email address of the funder.
+      * @param organization Name of the funder's organization
+      */
     function createFunder(
         string memory firstName, 
         string memory lastName, 
@@ -73,6 +79,11 @@ contract Users {
         emit CreatedAccount(msg.sender, userCount, UserLevel.Funder);
     }
 
+    /** @dev Creates an account at the Student level.
+      * @param firstName First name of the student.
+      * @param lastName Last name of the student.
+      * @param email Email address of the student.
+      */
     function createStudent(
         string memory firstName, 
         string memory lastName, 
@@ -84,6 +95,14 @@ contract Users {
         emit CreatedAccount(msg.sender, userCount, UserLevel.Student);
     }
 
+    /** @dev Fetches information about the user.
+      * @notice This should eventually be a private/internal function.
+      * @param userId The unique ID of the user to fetch.
+      * @return id The unique ID of the user.
+      * @return firstName The first name of the user.
+      * @return lastName The last name of the user.
+      * @return email The email address of the user.
+      */
     function getUser(uint userId) view public returns (uint id, string memory firstName, string memory lastName, string memory email) {
         firstName = users[userId].firstName;
         lastName = users[userId].lastName;
@@ -91,16 +110,28 @@ contract Users {
         return (userId, firstName, lastName, email);
     }
 
+    /** @dev Fetches the wallet address of a user.
+      * @notice This should eventually be a private/internal function.
+      * @param userId The unique ID of the user to fetch.
+      * @return address The wallet address of the user.
+      */
     function getUserWallet(uint userId) view public returns (address payable) {
         User memory user = users[userId];
         return user.wallet;
     }
 
+    /** @dev Fetches the level of a user.
+      * @notice This should eventually be a private/internal function.
+      * @param userId The unique ID of the user to fetch.
+      * @return level Returns either 0 or 1 for Funder or Student.
+      */
     function getUserLevel(uint userId) view public returns(uint level) {
         User memory user = users[userId];
         return uint(user.level);
     }
 
+    /** @dev Destroys the contract & sends balance to admin.
+      */
     function close() public isAdmin {
         selfdestruct(admin);
     }
