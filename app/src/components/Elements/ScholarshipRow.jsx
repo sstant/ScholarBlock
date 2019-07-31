@@ -13,11 +13,12 @@ const ScholarshipRow = props => {
         <tr onClick={() => props.history.push(`/scholarships/${props.id}`)}>
             <th scope="row">{scholarship.name}</th>
             <td>{moment(scholarship.createdAt * 1000).format('MM/DD/YY')}</td>
-            <td>{web3.utils.fromWei(scholarship.amount)} ETH</td>
-            <td>{
-                scholarship.winner ? (<span className="badge badge-success">Awarded</span>) : 
+            <td align="center">{scholarship.applicantCount}</td>
+            <td align="center">{web3.utils.fromWei(scholarship.amount)}</td>
+            <td align="right">{
+                scholarship.winner !== "0" ? (<span className="badge badge-success">Awarded</span>) : 
                 scholarship.active ? (<span className="badge badge-primary">Active</span>) :
-                (<span className="badge">Inactive</span>)
+                (<span className="badge badge-secondary">Inactive</span>)
             }</td>
         </tr>
     ) : (<tr>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { drizzleReactHooks } from 'drizzle-react';
-import { OwnerAlert, ApplyForm, CreateAccount, ApplicantTable, OwnerActions } from '../Elements';
+import { OwnerAlert, ApplyForm, CreateAccount, ApplicantTable, OwnerActions, AboutFunder } from '../Elements';
 import web3 from 'web3';
 
 const Scholarship = props => {
@@ -15,22 +15,19 @@ const Scholarship = props => {
 
     if (scholarship && scholarship.owner === account) owner = true;
 
-    console.log(scholarship);
-
     return scholarship && scholarship.id !== '0' ? (
         <div className="container">
-        {
-            owner && (<OwnerAlert />)
-        }
-            
             <div className="row">
                 <div className="col-md-8">
+
+                    {
+                        owner && (<OwnerAlert />)
+                    }
 
                     <div className="jumbotron">
                         <h1 style={{'float':'right'}}><span className="badge badge-success">{web3.utils.fromWei(scholarship.amount)} ETH</span></h1>
                         <h1 className="display-4">{scholarship.name}</h1>
                         <p className="lead">{scholarship.description}</p>
-                        <hr className="my-4" />
                         {
                             /*
                             <p>This scholarship doesn't have any account requirements.</p>
@@ -53,12 +50,7 @@ const Scholarship = props => {
                             <ApplyForm user={user} scholarship={scholarship} />
                         )
                     }
-                    <div className="card mt-4">
-                        <div className="card-header">About the Funder</div>
-                        <div className="card-body text-center">
-                            <p className="mb-0">This scholarship was funded by.</p>
-                        </div>
-                    </div>
+                    <AboutFunder scholarship={scholarship} />
                 </div>
             </div>
         </div>

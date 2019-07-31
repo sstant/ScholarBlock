@@ -27,7 +27,7 @@ const Header = props => (
             </li>
           </ul>
           <span className="navbar-text">
-            <button className="btn btn-outline-success my-2 my-sm-0">Create Scholarship</button>
+            <a href="https://github.com/sstant/ScholarBlock" target="_blank" rel="noopener noreferrer" className="btn btn-outline-secondary my-2 my-sm-0">View on Github</a>
           </span>
         </div>
       </nav>

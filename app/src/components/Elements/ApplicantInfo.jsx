@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { LoadingRow } from './';
 import { drizzleReactHooks } from 'drizzle-react';
 
@@ -6,6 +6,10 @@ const ApplicantInfo = ({ applicant, scholarship }) => {
 
     const { useCacheSend } = drizzleReactHooks.useDrizzle();
     const { send } = useCacheSend('Scholarships', 'selectWinner');
+
+    const chooseWinner = () => {
+        send(applicant.id, scholarship.id);
+    }
 
     return applicant ? (
         <tr>
@@ -15,10 +19,12 @@ const ApplicantInfo = ({ applicant, scholarship }) => {
             {
                 scholarship.active ? (
                     <td className="text-right">
-                        <button className="btn btn-success btn-sm" onClick={useCallback(() => send(applicant.id, scholarship.id))}>Choose as Winner</button>
+                        <button className="btn btn-success btn-sm" onClick={chooseWinner}>Choose as Winner</button>
                     </td>
                 ) : scholarship.winner === applicant.id ? (
-                    <span className="badge badge-success mt-3">Winner</span>
+                    <td className="text-right">
+                        <span className="badge badge-success">Winner</span>
+                    </td>
                 ) : (null)
             }
         </tr>

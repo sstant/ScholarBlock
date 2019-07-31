@@ -14,6 +14,7 @@ import LoadingRow from './LoadingRow';
 import CreateStudent from './CreateStudent';
 import CreateFunder from './CreateFunder';
 import OwnerActions from './OwnerActions';
+import AboutFunder from './AboutFunder';
 
 export {
     ScholarshipTable,
@@ -31,5 +32,6 @@ export {
     LoadingRow,
     CreateStudent,
     CreateFunder,
-    OwnerActions
+    OwnerActions,
+    AboutFunder
 }

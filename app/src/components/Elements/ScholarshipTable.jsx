@@ -20,13 +20,16 @@ const ScholarshipTable = () => {
                     <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Created</th>
-                        <th scope="col">Award</th>
-                        <th scope="col">Status</th>
+                        <th scope="col" className="text-center">Applicants</th>
+                        <th scope="col" className="text-center">Award (ETH)</th>
+                        <th scope="col" className="text-right">Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        results.map(id => <ScholarshipRow key={id} id={id} />)
+                        results
+                        .sort((a, b) => b.createdAt - a.createdAt)
+                        .map(id => <ScholarshipRow key={id} id={id} />)
                     }
                 </tbody>
                 </table>

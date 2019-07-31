@@ -3,8 +3,7 @@ import "./Users.sol";
 
 contract Scholarships {
 
-    Users usersContract;
-    address usersAddress;
+    address payable private admin;
 
     struct Scholarship {
         uint id;
@@ -21,8 +20,12 @@ contract Scholarships {
     uint public scholarshipCount = 0;
     mapping(uint => Scholarship) public scholarships;
     mapping(uint => uint[]) public applicants;
+
+    Users usersContract;
+    address payable usersAddress;
     
-    constructor(address _usersAddress) public {
+    constructor(address payable _usersAddress) public {
+        admin = msg.sender;
         usersAddress = _usersAddress;
         usersContract = Users(usersAddress);
     }
@@ -30,6 +33,12 @@ contract Scholarships {
     event CreatedScholarship(uint id, string name, address owner, string description, uint amount);
     event ApplyForScholarship(uint userId, uint scholarshipId);
     event SelectedWinner(uint userId, uint scholarshipId, uint amount);
+    event DisabledScholarship(uint scholarshipId, uint amount);
+
+    modifier isAdmin() {
+        require(msg.sender == admin);
+        _;
+    }
 
     modifier isStudent() {
         uint userId = usersContract.addressBook(msg.sender);
@@ -52,6 +61,10 @@ contract Scholarships {
     modifier ownsScholarship(uint scholarshipId) {
         require(scholarships[scholarshipId].owner == msg.sender, "You must be the scholarship owner.");
         _;
+    }
+
+    function() external payable {
+        revert();
     }
 
     function create(string memory _name, string memory _description) 
@@ -137,6 +150,20 @@ contract Scholarships {
 
         emit SelectedWinner(userId, scholarshipId, scholarships[scholarshipId].amount);
 
+    }
+
+    function disableScholarship(uint scholarshipId) 
+        public payable 
+        ownsScholarship(scholarshipId) {
+        
+        require(scholarships[scholarshipId].active, "This scholarship is already inactive.");
+        scholarships[scholarshipId].active = false;
+        msg.sender.transfer(scholarships[scholarshipId].amount);
+        emit DisabledScholarship(scholarshipId, scholarships[scholarshipId].amount);
+    }
+
+    function close() public isAdmin {
+        selfdestruct(admin);
     }
 
 }
