@@ -21,7 +21,7 @@ const CreateScholarship = props => {
             const price = res.data[0].price_usd;
             updateUSD((price * amount).toFixed(2));
         });
-    }, [amount])
+    }, [amount]);
 
     const create = ev => {
         ev.preventDefault();

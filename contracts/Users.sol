@@ -1,8 +1,11 @@
 pragma solidity ^0.5.0;
 
-contract Users {
+/// @title Accounts for ScholarBlock
+/// @author Sebastian Stant
+/// @notice Anyone can create a student or funder account
+/// @dev Account data is not currently protected or verified
 
-    /** VARIABLES */
+contract Users {
 
     enum UserLevel {
         Student,
@@ -22,15 +25,10 @@ contract Users {
 
     uint public userCount = 0;
 
-    // users should ideally not be public
     mapping(uint => User) public users;
     mapping(address => uint) public addressBook;
 
-    /** EVENTS */
-
     event CreatedAccount(address wallet, uint id, UserLevel level);
-
-    /** MODIFIERS */
 
     modifier checkUserInfo(
         string memory firstName,
@@ -45,8 +43,6 @@ contract Users {
         require(_email.length != 0, "please provide an email address");
         _;
     }
-
-    /** FUNCTIONS */
 
     function createFunder(
         string memory firstName, 

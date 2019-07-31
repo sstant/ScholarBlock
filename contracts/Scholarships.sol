@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 import "./Users.sol";
 
-contract Scholarships is Users {
+contract Scholarships {
 
     Users usersContract;
     address usersAddress;
@@ -18,7 +18,6 @@ contract Scholarships is Users {
         uint winner;
     }
 
-
     uint public scholarshipCount = 0;
     mapping(uint => Scholarship) public scholarships;
     mapping(uint => uint[]) public applicants;
@@ -28,28 +27,21 @@ contract Scholarships is Users {
         usersContract = Users(usersAddress);
     }
 
-    /* EVENTS */
-
     event CreatedScholarship(uint id, string name, address owner, string description, uint amount);
     event ApplyForScholarship(uint userId, uint scholarshipId);
     event SelectedWinner(uint userId, uint scholarshipId, uint amount);
 
-    /** MODIFIERS */
-
-    modifier onlyStudent(uint scholarshipId) {
+    modifier isStudent() {
         uint userId = usersContract.addressBook(msg.sender);
         require(userId != 0, "Could not find a user at this address.");
 
         uint userLevel = usersContract.getUserLevel(userId);
         require(userLevel == 0, "Must apply from a student account");
-
-        bool applied = hasApplied(userId, scholarshipId);
-        require(applied == false, "You have already applied to this scholarship.");
         _;
     }
 
-    modifier onlyFunder(address _address) {
-        uint userId = usersContract.addressBook(_address);
+    modifier isFunder() {
+        uint userId = usersContract.addressBook(msg.sender);
         require(userId > 0, "Could not find a user at this address.");
 
         uint userLevel = usersContract.getUserLevel(userId);
@@ -57,17 +49,22 @@ contract Scholarships is Users {
         _;
     }
 
-    /** FUNCTIONS */
+    modifier ownsScholarship(uint scholarshipId) {
+        require(scholarships[scholarshipId].owner == msg.sender, "You must be the scholarship owner.");
+        _;
+    }
 
     function create(string memory _name, string memory _description) 
         public payable
-        onlyFunder(msg.sender) {
+        isFunder() {
 
         bytes memory name = bytes(_name);
-        require(name.length != 0, "please provide a name");
-        // require sender has an account
-        // require a minimum amount of wei
-        // enforce max string size for name/description
+        bytes memory description = bytes(_description);
+        require(name.length != 0, "Please provide a scholarship name.");
+        require(description.length != 0, "Please provide a scholarship description.");
+        require(name.length < 60, "Please limit your scholarship name to 60 characters.");
+        require(description.length < 500, "Please limit your scholarship description to 500 characters.");
+        
         scholarshipCount ++;
 
         scholarships[scholarshipCount] = Scholarship({
@@ -87,12 +84,12 @@ contract Scholarships is Users {
 
     function applyForScholarship(uint scholarshipId)
         public
-        onlyStudent(scholarshipId) {
-
-            // require scholarship is active
+        isStudent() {
 
         uint userId = usersContract.addressBook(msg.sender);
-
+        require(hasApplied(userId, scholarshipId) == false, "You have already applied to this scholarship.");
+        require(scholarships[scholarshipId].active, "This scholarship is not active.");
+       
         applicants[scholarshipId].push(userId);
         scholarships[scholarshipId].applicantCount ++;
 
@@ -109,35 +106,27 @@ contract Scholarships is Users {
         return false;
     }
 
-    // make sure owner of 
-    // only owner of scholarship
-    function listApplicants(uint scholarshipId) public view returns(uint[] memory) {
+    function listApplicants(uint scholarshipId) 
+        public view 
+        ownsScholarship(scholarshipId)
+        returns(uint[] memory) {
         return applicants[scholarshipId];
     }
 
-    // make sure owner of 
-    // only owner of scholarship
-    function getApplicant(uint scholarshipId, uint userId) public view returns (uint id, string memory firstName, string memory lastName, string memory email) {
+    function getApplicant(uint scholarshipId, uint userId) 
+        public view 
+        ownsScholarship(scholarshipId)
+        returns (uint id, string memory firstName, string memory lastName, string memory email) {
         // potential issue with looping
         require(hasApplied(userId, scholarshipId), "User has not applied to this scholarship.");
-        
-        // id = usersContract.getUser(userId).id;
-        // firstName = usersContract.getUser(userId).firstName;
-        // lastName = usersContract.getUser(userId).lastName;
-        // email = usersContract.getUser(userId).email;
-
-        
-        //firstName = usersContract.users.call(userId).firstName;
-        //lastName = usersContract.users(userId).lastName;
-        //email = usersContract.users(userId).email;
-    
-
         return usersContract.getUser(userId);
     }
 
-    function selectWinner(uint userId, uint scholarshipId) public {
+    function selectWinner(uint userId, uint scholarshipId) 
+        public 
+        ownsScholarship(scholarshipId) {
 
-        // require scholarship is active
+        require(scholarships[scholarshipId].active, "This scholarship is not currently active.");
 
         scholarships[scholarshipId].active = false;
         scholarships[scholarshipId].winner = userId;
@@ -149,18 +138,5 @@ contract Scholarships is Users {
         emit SelectedWinner(userId, scholarshipId, scholarships[scholarshipId].amount);
 
     }
-    
-    /*
-    function selectWinner(uint scholarshipId, uint applicantId) public {
-
-        // check that you are owner of scholarship;
-        Scholarship memory scholarship = scholarships[scholarshipId];
-        require(msg.sender == scholarship.owner, "You are not the owner of this scholarship."); 
-                
-        scholarship.active = false;
-        scholarship.winner = applicantId;
-        
-    }
-    */
 
 }

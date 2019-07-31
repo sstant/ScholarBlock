@@ -50,7 +50,7 @@ const Scholarship = props => {
                         ) : !user ? (
                             <CreateAccount account={account} />
                         ) : (
-                            <ApplyForm user={user} scholarshipId={scholarship.id} />
+                            <ApplyForm user={user} scholarship={scholarship} />
                         )
                     }
                     <div className="card mt-4">
