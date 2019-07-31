@@ -26,14 +26,12 @@ const CreateScholarship = props => {
     const create = ev => {
         ev.preventDefault();
         var value = web3.utils.toWei(amount,'ether');
-        send(name, description, (new Date().getTime() / 1000), { value });
+        send(name, description, { value });
         updateName('');
         updateAmount('');
         updateDescription('');
         updateUSD(0);
     };
-
-    console.log('RENDERING');
 
     return (
         <div className="card mt-4 mb-4">

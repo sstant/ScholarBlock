@@ -8,8 +8,8 @@ const ApplyForm = ({ scholarshipId, user }) => {
 
     const { useCacheSend, useCacheCall } = drizzleReactHooks.useDrizzle();
 
-    const hasApplied = useCacheCall('Applicants', 'hasApplied', user.id, scholarshipId);
-    const { send, TXObjects } = useCacheSend('Applicants', 'create');
+    const hasApplied = useCacheCall('Scholarships', 'hasApplied', user.id, scholarshipId);
+    const { send, TXObjects } = useCacheSend('Scholarships', 'applyForScholarship', scholarshipId);
 
     const submitApplication = ev => {
         ev.preventDefault();

@@ -5,9 +5,14 @@ import { ApplicantInfo, LoadingRow } from './';
 const ApplicantRow = ({ id, scholarshipId }) => {
 
     const { useCacheCall } = drizzleReactHooks.useDrizzle();
-    const applicant = useCacheCall('Applicants', 'applicants', id);
+    const applicant = useCacheCall('Scholarships', 'getApplicant', scholarshipId, id);
 
-    return applicant ? (<ApplicantInfo userId={applicant.userId} applicantId={id} scholarsahipId={scholarshipId} />) : (<LoadingRow colSpan={4} />)
+    console.log(applicant);
+
+    return applicant ? (<ApplicantInfo applicant={{
+        ...applicant,
+        id: id
+    }} scholarsahipId={scholarshipId} />) : (<LoadingRow colSpan={4} />)
 
 }
 

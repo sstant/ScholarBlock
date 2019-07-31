@@ -6,7 +6,7 @@ ScholarBlock is a decentralized scholarship platform. Users can either fund scho
 
 1) Run `ganache-cli`
 2) Select localhost in `MetaMask`
-3) Enter seed phase
+3) Enter seed phase in MetaMask
 4) Open new window in terminal
 5) git clone https://github.com/sstant/ScholarBlock
 6) cd ScholarBlock

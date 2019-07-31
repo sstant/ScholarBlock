@@ -1,20 +1,16 @@
 import React from 'react';
-import { drizzleReactHooks } from 'drizzle-react';
 import { LoadingRow } from './';
 import ChooseWinner from './ChooseWinner';
 
-const ApplicantInfo = ({ scholarshipId, applicantId, userId }) => {
+const ApplicantInfo = ({ applicant, scholarshipId }) => {
 
-    const { useCacheCall } = drizzleReactHooks.useDrizzle();
-    const user = useCacheCall('Users', 'users', userId);
-
-    return user ? (
+    return applicant ? (
         <tr>
-            <th scope="row">{user.firstName}</th>
-            <td>{user.lastName}</td>
-            <td>{user.email}</td>
+            <th scope="row">{applicant.firstName}</th>
+            <td>{applicant.lastName}</td>
+            <td>{applicant.email}</td>
             <td className="text-right">
-                <ChooseWinner scholarshipId={scholarshipId} applicantId={applicantId} />
+                <ChooseWinner scholarshipId={scholarshipId} applicantId={applicant.id} />
             </td>
         </tr>
     ) : (<LoadingRow colSpan={4} />)
