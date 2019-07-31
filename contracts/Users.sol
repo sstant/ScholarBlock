@@ -7,6 +7,8 @@ pragma solidity ^0.5.0;
 
 contract Users {
 
+    address payable private admin;
+
     enum UserLevel {
         Student,
         Funder
@@ -28,7 +30,16 @@ contract Users {
     mapping(uint => User) public users;
     mapping(address => uint) public addressBook;
 
+    constructor() public {
+        admin = msg.sender;
+    }
+
     event CreatedAccount(address wallet, uint id, UserLevel level);
+
+    modifier isAdmin() {
+        require(msg.sender == admin);
+        _;
+    }
 
     modifier checkUserInfo(
         string memory firstName,
@@ -42,6 +53,10 @@ contract Users {
         require(_lastName.length != 0, "please provide a last name");
         require(_email.length != 0, "please provide an email address");
         _;
+    }
+
+    function() external payable {
+        revert();
     }
 
     function createFunder(
@@ -84,6 +99,10 @@ contract Users {
     function getUserLevel(uint userId) view public returns(uint level) {
         User memory user = users[userId];
         return uint(user.level);
+    }
+
+    function close() public isAdmin {
+        selfdestruct(admin);
     }
     
 }
