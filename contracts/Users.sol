@@ -55,6 +55,8 @@ contract Users {
         _;
     }
 
+    /** @dev Fallback function.
+      */
     function() external payable {
         revert();
     }

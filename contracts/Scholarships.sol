@@ -65,10 +65,17 @@ contract Scholarships {
         _;
     }
 
+    /** @dev Fallback function.
+      */
     function() external payable {
         revert();
     }
 
+    /** @dev Creates a Scholarship.
+      * @notice Not current storing gender/ethnicity preference.
+      * @param name The name of the Scholarship.
+      * @param decription The description of the Scholarship.
+      */
     function create(string memory _name, string memory _description) 
         public payable
         isFunder() {
@@ -97,6 +104,9 @@ contract Scholarships {
         emit CreatedScholarship(scholarshipCount, _name, msg.sender, _description, msg.value);
     }
 
+    /** @dev Pairs a User student with a scholarship.
+      * @param scholarshipId The unique ID of the scholarship.
+      */
     function applyForScholarship(uint scholarshipId)
         public
         isStudent() {
@@ -111,6 +121,12 @@ contract Scholarships {
         emit ApplyForScholarship(userId, scholarshipId);
     }
 
+    /** @dev Whether the student has applied for a scholarship.
+      * @notice This loop should probably be avoided to deal with larger maps.
+      * @param userId The unique ID of the user to check.
+      * @param scholarshipid The unique ID of the scholarship to check.
+      * @return bool true/false
+      */
     function hasApplied(uint userId, uint scholarshipId) public view returns (bool) {
         uint[] memory _userIds = applicants[scholarshipId];
         for (uint i = 0; i < _userIds.length; i++) {
@@ -121,6 +137,11 @@ contract Scholarships {
         return false;
     }
 
+    /** @dev Get a list of applicants for a scholarship
+      * @notice Only the owner of the scholarship can call this.
+      * @param scholarshipId The unique ID of the scholarship.
+      * @return uint[] an array of user IDs
+      */
     function listApplicants(uint scholarshipId) 
         public view 
         ownsScholarship(scholarshipId)
@@ -128,6 +149,16 @@ contract Scholarships {
         return applicants[scholarshipId];
     }
 
+    /** @dev Get information on a single scholarship applicant.
+      * @notice Only the owner of the scholarship can call this, but User contract function is public.
+      * @notice Param order need to be switched to conform to other functions.
+      * @param scholarshipId The unique ID of the scholarship.
+      * @param userId The unique ID of the user.
+      * @return id the unique ID of the user, same as param
+      * @return firstName the first name of the user
+      * @return lastName the last name of the user
+      * @return email the email address of the user
+      */
     function getApplicant(uint scholarshipId, uint userId) 
         public view 
         ownsScholarship(scholarshipId)
