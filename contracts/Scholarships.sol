@@ -168,6 +168,11 @@ contract Scholarships {
         return usersContract.getUser(userId);
     }
 
+    /** @dev Update Scholarship with Winner, deactivate scholarship & send award amount.
+      * @notice This can be refactored for better security.
+      * @param userId The unique ID of the user.
+      * @param scholarshipId The unique ID of the scholarship.
+      */
     function selectWinner(uint userId, uint scholarshipId) 
         public 
         ownsScholarship(scholarshipId) {
@@ -185,6 +190,10 @@ contract Scholarships {
 
     }
 
+    /** @dev Deactivate a scholarship.
+      * @notice Only the owner of the scholarship can call this.
+      * @param scholarshipId The unique ID of the scholarship.
+      */
     function disableScholarship(uint scholarshipId) 
         public payable 
         ownsScholarship(scholarshipId) {
