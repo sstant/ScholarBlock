@@ -1,17 +1,19 @@
 ## About ScholarBlock
 
-ScholarBlock is a decentralized scholarship platform. Users can either fund scholarships with ETH, or apply for them. Scholarship owners can select winning applicants and transfer them their funds.
+ScholarBlock is a decentralized scholarship platform. Users can either fund scholarships with ETH, or apply for them. Scholarship owners can select winning applicants and transfer them the award amount.
 
-### Set up
+### Project Setup
 
 1) Run `ganache-cli`
-2) Select localhost in `MetaMask`
+2) Select `localhost:8545` in MetaMask
 3) Enter seed phase in MetaMask
 4) Open new window in terminal
-5) git clone https://github.com/sstant/ScholarBlock
-6) cd ScholarBlock
-7) npm install
-8) npm run start:local
+5) `git clone https://github.com/sstant/ScholarBlock`
+6) `cd ScholarBlock`
+7) `npm install`
+8) `npm run start:local`
+
+The last command will compile + migrate the contracts, and start a react app on http://localhost:3000
 
 ## Creating a Scholarship
 
